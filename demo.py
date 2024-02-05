@@ -1,15 +1,15 @@
 import gradio as gr
-import google.generativeai as palm
+import google.generativeai as key
 
-palm.configure(api_key='AIzaSyCfwsFgerjucVWZy2V6ZU76dMMPuYZ7Dag')
+key.configure(api_key='AIzaSyCfwsFgerjucVWZy2V6ZU76dMMPuYZ7Dag')
 
-models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+models = [m for m in key.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
 
 def generate_code(prompt):
     response =generate_code
     if model:
-        completion=palm.generate_text(
+        completion=key.generate_text(
             model=model,
             prompt=prompt,
             temperature=0,
