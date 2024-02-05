@@ -1,31 +1,30 @@
 import gradio as gr
-import openai
- 
-openai.api_key="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"
- 
-def code_gen_openai(prompt):
-    try:
-        # Use the OpenAI GPT-3 API to generate code
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Use a chat-based model
-            messages=[
-            {"role": "user", "content": prompt}
-            ],
-            max_tokens=100
+import google.generativeai as palm
+
+palm.configure(api_key='AIzaSyCfwsFgerjucVWZy2V6ZU76dMMPuYZ7Dag')
+
+models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+model = models[0].name
+
+def generate_code(prompt):
+    response =generate_code
+    if model:
+        completion=palm.generate_text(
+            model=model,
+            prompt=prompt,
+            temperature=0,
+            max_output_tokens=800,
         )
-       
-        # Extract the generated code from the API response
-        generated_code = response['choices'][0]['message']['content'].strip()
-       
-        return generated_code
-    except Exception as e:
-        return f"Error: {e}"
+        response = completion.result
+        return response
+    else:
+        return "No module found"
  
 with gr.Blocks() as demo:
     gr.Markdown('<center>**CodeGen App**</center>')
     input = gr.Textbox()
     output = gr.Textbox()
     button = gr.Button("Submit")
-    button.click(fn=code_gen_openai, inputs=input, outputs=output)
+    button.click(fn=generate_code, inputs=input, outputs=output)
  
 demo.launch(share=True)
